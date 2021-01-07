@@ -8,6 +8,7 @@ import {ManifestAbstract} from './manifest.abstract';
 import {ENTITY_TYPES, HOOK_EVENTS} from '../../constants';
 import {getManifestName} from '../../utils/system';
 import {emitHookEvent} from '../../utils';
+import {TargetExistsError} from '../../errors';
 
 export class ManifestLocal<Entity extends IManifest, Manifest extends ManifestModel<Entity>> extends ManifestAbstract<
     LocalEnvironment,
@@ -133,8 +134,25 @@ export class ManifestLocal<Entity extends IManifest, Manifest extends ManifestMo
         const entityRootPath = this.environment.getEntityRootPath(this.entityType, id);
         const manifestPath = path.join(entityRootPath, getManifestName(this.entityType));
 
-        const manifest = Dict.from(await this.get(id));
-        const updated = merge ? manifest.merge(update).merge({id}) : manifest.assign(update).assign({id});
+        const manifest = await this.get(id);
+        /* eslint-disable indent */
+        const updated = merge
+            ? Dict.from(manifest)
+                  .merge(update)
+                  .merge({id})
+            : Dict.from(manifest)
+                  .assign(update)
+                  .assign({id});
+        /* eslint-enable indent */
+
+        if (update.name && update.name !== manifest.name) {
+            const found = await this.getEntity(update.name).catch(() => null);
+            if (found) {
+                throw new TargetExistsError(`Entity "${this.entityType}" with name "${update.name}" already exists`, [
+                    'Use a different name',
+                ]);
+            }
+        }
 
         await emitHookEvent(HOOK_EVENTS.MANIFEST_WRITE, {
             manifestPath,

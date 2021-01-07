@@ -107,7 +107,6 @@
         "max-lines-per-function": ["warn", 100],
         "max-nested-callbacks": ["error", 5],
         "max-params": ["warn", 4],
-        "max-statements": "warn",
         "max-statements-per-line": "error",
         "new-parens": "error",
         "newline-per-chained-call": "error",
