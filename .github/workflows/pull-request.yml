@@ -20,8 +20,11 @@ jobs:
         strategy:
             matrix:
                 os: [macos-latest, ubuntu-latest, windows-latest]
+                neo4j-version: ['4.4.8', '4.3.14']
 
         steps:
             - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
             - uses: ./.github/workflows/setup
             - run: pnpm test
+              env:
+                  TEST_NEO4J_VERSION: ${{ matrix.neo4j-version }}

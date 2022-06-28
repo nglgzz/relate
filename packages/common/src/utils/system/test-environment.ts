@@ -11,12 +11,20 @@ import {NotSupportedError} from '../../errors';
 import {IDbmsInfo} from '../../models';
 import {SystemModule, SystemProvider} from '../../system';
 
-export const TEST_NEO4J_VERSION = process.env.TEST_NEO4J_VERSION || '4.0.12';
 export const TEST_NEO4J_EDITION: NEO4J_EDITION = Dict.from(NEO4J_EDITION)
     .values.find((e) => e === process.env.TEST_NEO4J_EDITION)
     .getOrElse(NEO4J_EDITION.ENTERPRISE);
 export const TEST_NEO4J_CREDENTIALS = 'password';
 
+export const TEST_NEO4J_VERSIONS = {
+    default: process.env.TEST_NEO4J_VERSION || '4.4.8',
+
+    majorUpgradeSource: '3.5.34',
+    majorUpgradeTarget: '4.0.12',
+
+    minorUpgradeSource: '4.3.14',
+    minorUpgradeTarget: '4.4.8',
+};
 export class TestEnvironment {
     constructor(
         public readonly filename: string,
@@ -76,10 +84,10 @@ export class TestEnvironment {
         return `[${shortUUID}] ${path.relative('..', this.filename)}`;
     }
 
-    async createDbms(): Promise<IDbmsInfo> {
+    async createDbms(version: string = TEST_NEO4J_VERSIONS.default): Promise<IDbmsInfo> {
         const {id: dbmsId} = await this.environment.dbmss.install(
             this.createName(),
-            TEST_NEO4J_VERSION,
+            version,
             TEST_NEO4J_EDITION,
             TEST_NEO4J_CREDENTIALS,
         );

@@ -85,7 +85,7 @@ describe('$relate dbms', () => {
                 name: 'plugin-test',
                 isOfficial: 'false',
                 homepageUrl: 'https://github.com/neo4j-contrib/neo4j-apoc-procedures',
-                version: '4.0.0.18',
+                version: '4.4.0.6',
             },
         ]);
     });
@@ -98,7 +98,7 @@ describe('$relate dbms', () => {
             name: 'plugin-test',
             isOfficial: 'false',
             homepageUrl: 'https://github.com/neo4j-contrib/neo4j-apoc-procedures',
-            version: '4.0.0.18',
+            version: '4.4.0.6',
         });
     });
 

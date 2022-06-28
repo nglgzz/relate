@@ -1,6 +1,13 @@
 // @todo: better way of handling types
 export {IExtensionVersion, loadExtensionsFor, getAppLaunchUrl} from './utils/extensions';
-export {TestDbmss, TestExtensions, TestEnvironment} from './utils/system';
+export {
+    TestDbmss,
+    TestExtensions,
+    TestEnvironment,
+    TEST_NEO4J_CREDENTIALS,
+    TEST_NEO4J_EDITION,
+    TEST_NEO4J_VERSIONS,
+} from './utils/system';
 export {getLatestCompatibleVersion, listVersions} from './utils/dbms-plugins';
 export * from './system';
 export * from './models';
